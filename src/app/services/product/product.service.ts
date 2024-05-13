@@ -13,12 +13,41 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  // Fetch all products
   public getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl).pipe(
-      retry(3), // Retry a failed request up to 3 times
+      retry(3), // Retry failed request for products fetching up to 3 times
       catchError(this.handleError)
     );
   }
+
+    // Fetch a single product by ID
+    public getProductById(productId: number): Observable<Product> {
+      return this.http.get<Product>(`${this.apiUrl}/${productId}`).pipe(
+        catchError(this.handleError)
+      );
+    }
+  
+    // Add a new product
+    public addProduct(product: Product): Observable<Product> {
+      return this.http.post<Product>(this.apiUrl, product).pipe(
+        catchError(this.handleError)
+      );
+    }
+  
+    // Update an existing product
+    public updateProduct(product: Product): Observable<Product> {
+      return this.http.put<Product>(`${this.apiUrl}/${product.id}`, product).pipe(
+        catchError(this.handleError)
+      );
+    }
+  
+    // Delete a product
+    public deleteProduct(productId: number): Observable<any> {
+      return this.http.delete(`${this.apiUrl}/${productId}`).pipe(
+        catchError(this.handleError)
+      );
+    }
 
   // Adding error handling for issues with network or backend(Imagining its not just a mocked API)
   private handleError(error: HttpErrorResponse) {
