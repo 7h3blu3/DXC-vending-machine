@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { Product } from '../../models/product.model';
 import { environment } from 'src/environments/environment';
 
@@ -15,6 +15,7 @@ export class ProductService {
 
   public getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl).pipe(
+      retry(3), // Retry a failed request up to 3 times
       catchError(this.handleError)
     );
   }
