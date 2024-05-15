@@ -24,6 +24,16 @@ export class ProductService {
     ).subscribe(); // Subscribe here to kick off the HTTP request
   }
 
+    // Getter to access current products
+    public get currentProducts(): Product[] {
+      return this.productsSubject.getValue();
+    }
+
+    // Setter to update products(Will be used primarily for reset)
+    public setProducts(products: Product[]): void {
+      this.productsSubject.next(products);
+    }
+
     // Fetch a single product by ID
     public getProductById(productId: number): Observable<Product> {
       return this.http.get<Product>(`${this.apiUrl}/${productId}`).pipe(

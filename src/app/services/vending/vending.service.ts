@@ -66,9 +66,13 @@ export class VendingService {
   }
   
   reset() {
-    const insertedAmount = this.insertedAmountSubject.getValue();
-    this.totalAmountSubject.next(this.totalAmountSubject.getValue() + insertedAmount);
-    this.insertedAmountSubject.next(0);
-    this.selectedProduct = null;
+    this.totalAmountSubject.next(100); // Reset total amount to 100 BGN
+    this.insertedAmountSubject.next(0); // Reset inserted amount to 0
+    this.selectedProduct = null; // Clear the selected product
+
+    // Reset the quantity of all items to 15
+    const products = this.productService.currentProducts;
+    const updatedProducts = products.map(product => ({ ...product, quantity: 15 }));
+    this.productService.setProducts(updatedProducts); // Use the method to update products
   }
 }
