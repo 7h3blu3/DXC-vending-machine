@@ -53,12 +53,6 @@
       "name": "Chocolate",
       "price": 1.5,
       "quantity": 12
-    },
-    {
-      "id": "2e5c",
-      "name": "Crisps",
-      "price": 1.2,
-      "quantity": 14
     }
   ]
 }
