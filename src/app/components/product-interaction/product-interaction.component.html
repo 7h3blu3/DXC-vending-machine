@@ -9,7 +9,7 @@
     </mat-card>
   </div>
   <div class="coin-inventory">
-    <h3>Available Coins: {{ totalAmount$ | async | currency:'BGN' }}</h3>
+    <h3>Total Amount Available: {{ (totalAmount$ | async) | currency:'BGN' }}</h3>
   </div>
   <div class="coin-insert-container">
     <button mat-raised-button (click)="insertCoin(0.10)">Insert 0.10 BGN</button>
@@ -17,7 +17,7 @@
     <button mat-raised-button (click)="insertCoin(0.50)">Insert 0.50 BGN</button>
     <button mat-raised-button (click)="insertCoin(1.00)">Insert 1.00 BGN</button>
   </div>
-  <p>Amount Inserted: {{ insertedAmount$ | async | currency:'BGN' }}</p>
+  <p>Amount Inserted: {{ (insertedAmount$ | async) | currency:'BGN' }}</p>
   <button mat-raised-button color="primary" (click)="onPurchase()" 
           [disabled]="!selectedProduct">Purchase</button>
   <button mat-raised-button color="warn" (click)="reset()">Reset</button>

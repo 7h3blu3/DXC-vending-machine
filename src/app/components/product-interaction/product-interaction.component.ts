@@ -34,10 +34,14 @@ export class ProductInteractionComponent implements OnInit {
   }
 
   onPurchase() {
-    this.vendingService.purchaseSelectedProduct();
+    const success = this.vendingService.purchaseSelectedProduct();
+    if (success) {
+      this.selectedProduct = null; // Clear the selected product only if the purchase was successful
+    }
   }
 
   reset() {
     this.vendingService.reset();
+    this.selectedProduct = null; 
   }
 }

@@ -42,7 +42,7 @@ export class VendingService {
     }
   }
 
-  purchaseSelectedProduct() {
+  purchaseSelectedProduct(): boolean {
     if (this.selectedProduct) {
       const totalInserted = this.insertedAmountSubject.getValue();
       if (totalInserted >= this.selectedProduct.price) {
@@ -50,17 +50,21 @@ export class VendingService {
         this.insertedAmountSubject.next(0); // Clear inserted amount
         this.selectedProduct.quantity -= 1;
         this.productService.updateProduct(this.selectedProduct);
-        this.selectedProduct = null;
         this.totalAmountSubject.next(this.totalAmountSubject.getValue() + change); // Add change back to total amount
         alert('Purchase successful. Your change: ' + change.toFixed(2) + ' BGN');
+        this.selectedProduct = null; // Clear the selected product after successful purchase
+        return true; // Indicate successful purchase
       } else {
-        alert('Insufficient funds. Please insert more coins.');
+        const amountNeeded = this.selectedProduct.price - totalInserted;
+        alert('Insufficient funds. Please insert ' + amountNeeded.toFixed(2) + ' more BGN.');
+        return false; // Indicate unsuccessful purchase
       }
     } else {
       alert('No product selected.');
+      return false; // Indicate unsuccessful purchase
     }
   }
-
+  
   reset() {
     const insertedAmount = this.insertedAmountSubject.getValue();
     this.totalAmountSubject.next(this.totalAmountSubject.getValue() + insertedAmount);
