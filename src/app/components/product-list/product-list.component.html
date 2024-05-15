@@ -1,40 +1,50 @@
 <div class="product-list-container">
-    <div *ngIf="products$ | async as products; else loading">
-      <mat-list>
-        <mat-list-item *ngFor="let product of products">
-          {{ product.name }} - {{ product.price | currency:'BGN' }} ({{ product.quantity }})
-          <button mat-icon-button color="primary" (click)="onEdit(product)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="onDelete(product.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-list-item>
-      </mat-list>
-    </div>
-
-    <ng-template #loading>
-      <div class="loading-spinner">
-        <mat-spinner></mat-spinner>
-        <p>Loading products...</p>
-      </div>
-    </ng-template>
-  
-    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="fill">
-        <mat-label>Product Name</mat-label>
-        <input matInput formControlName="name" placeholder="Product Name">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Product Price</mat-label>
-        <input matInput formControlName="price" placeholder="Product Price" type="number" step="0.01">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Quantity</mat-label>
-        <input matInput formControlName="quantity" placeholder="Quantity" type="number" min="1" max="15">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">{{ editMode ? 'Update' : 'Add' }} Product</button>
-      <button mat-raised-button type="button" (click)="onResetForm()">Reset</button>
-    </form>
+  <div *ngIf="products$ | async as products; else loading">
+    <mat-list>
+      <mat-list-item *ngFor="let product of products">
+        {{ product.name }} - {{ product.price | currency:'BGN' }} ({{ product.quantity }})
+        <button mat-icon-button color="primary" (click)="onEdit(product)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="onDelete(product.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
   </div>
-  
+
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+      <p>Loading products...</p>
+    </div>
+  </ng-template>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Product Name</mat-label>
+      <input matInput formControlName="name" placeholder="Product Name">
+      <mat-error *ngIf="productForm.get('name')?.hasError('required')">Product Name is required.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Product Price</mat-label>
+      <input matInput formControlName="price" placeholder="Product Price" type="number" step="0.01">
+      <mat-error *ngIf="productForm.get('price')?.hasError('required')">Product Price is required.</mat-error>
+      <mat-error *ngIf="productForm.get('price')?.hasError('min')">Product Price must be greater than 0.</mat-error>
+      <mat-error *ngIf="productForm.get('price')?.hasError('pattern')">Product Price must be a valid number.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Quantity</mat-label>
+      <input matInput formControlName="quantity" placeholder="Quantity" type="number" min="1" max="15">
+      <mat-error *ngIf="productForm.get('quantity')?.hasError('required')">Quantity is required.</mat-error>
+      <mat-error *ngIf="productForm.get('quantity')?.hasError('min')">Quantity must be at least 1.</mat-error>
+      <mat-error *ngIf="productForm.get('quantity')?.hasError('max')">Quantity must be 15 or less.</mat-error>
+      <mat-error *ngIf="productForm.get('quantity')?.hasError('pattern')">Quantity must be a valid number.</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">{{ editMode ? 'Update' : 'Add' }} Product</button>
+    <button mat-raised-button type="button" (click)="onResetForm()">Reset</button>
+  </form>
+</div>

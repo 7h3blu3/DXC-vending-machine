@@ -18,9 +18,9 @@ export class ProductListComponent implements OnInit {
   constructor(private productService: ProductService, private fb: FormBuilder) { 
     this.products$ = this.productService.products$;  // Initialize the observable
     this.productForm = this.fb.group({
-      name: ['', Validators.required],
-      price: ['', [Validators.required, Validators.min(0.01)]],
-      quantity: ['', [Validators.required, Validators.min(1), Validators.max(15)]]
+      name: ['', [Validators.required]],
+      price: ['', [Validators.required, Validators.min(0.01), Validators.pattern('^[0-9]*\\.?[0-9]+$')]], // Only numbers and decimals
+      quantity: ['', [Validators.required, Validators.min(1), Validators.max(15), Validators.pattern('^[0-9]+$')]] // Only integers
     });
   }
 
