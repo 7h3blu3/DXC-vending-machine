@@ -21,7 +21,7 @@ export class ProductService {
       retry(3), // Retry a failed request up to 3 times
       catchError(this.handleError),
       tap(products => this.productsSubject.next(products)) // Update the BehaviorSubject with the fetched products
-    ).subscribe(); // Subscribe here to kick off the HTTP request
+    ).subscribe(); // Subscribe to kick off the HTTP request
   }
 
   // Getter to access current products
@@ -34,40 +34,25 @@ export class ProductService {
     this.productsSubject.next(products);
   }
 
-  // Add a new product
+  // Add a new product in-memory
   addProduct(product: Product): void {
-    this.http.post<Product>(this.apiUrl, product).pipe(
-      catchError(this.handleError),
-      tap(newProduct => {
-        const currentProducts = this.productsSubject.getValue();
-        this.productsSubject.next([...currentProducts, newProduct]); // Update the BehaviorSubject with the new product
-      })
-    ).subscribe();
+    const currentProducts = this.productsSubject.getValue();
+    this.productsSubject.next([...currentProducts, product]);
   }
 
-  // Update an existing product
+  // Update an existing product in-memory
   updateProduct(product: Product): void {
-    this.http.put<Product>(`${this.apiUrl}/${product.id}`, product).pipe(
-      catchError(this.handleError),
-      tap(updatedProduct => {
-        const currentProducts = this.productsSubject.getValue();
-        const updatedProducts = currentProducts.map(p => p.id === updatedProduct.id ? updatedProduct : p);
-        this.productsSubject.next(updatedProducts); // Update the BehaviorSubject with the updated product list
-      })
-    ).subscribe();
+    const currentProducts = this.productsSubject.getValue();
+    const updatedProducts = currentProducts.map(p => p.id === product.id ? product : p);
+    this.productsSubject.next(updatedProducts);
   }
 
-  // Delete a product
+  // Delete a product in-memory
   deleteProduct(productId: number): void {
-    this.http.delete(`${this.apiUrl}/${productId}`).pipe(
-      catchError(this.handleError),
-      tap(() => {
-        const updatedProducts = this.productsSubject.getValue().filter(p => p.id !== productId);
-        this.productsSubject.next(updatedProducts); // Update the BehaviorSubject with the new product list
-      })
-    ).subscribe();
+    const currentProducts = this.productsSubject.getValue();
+    const updatedProducts = currentProducts.filter(p => p.id !== productId);
+    this.productsSubject.next(updatedProducts);
   }
-
 
   // Adding error handling for issues with network or backend(Imagining its not just a mocked API)
   private handleError(error: HttpErrorResponse) {
