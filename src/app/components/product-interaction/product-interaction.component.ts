@@ -20,7 +20,9 @@ export class ProductInteractionComponent implements OnInit {
     this.totalAmount$ = this.vendingService.totalAmount$;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.vendingService.loadInitialProducts();
+  }
 
   onSelectProduct(product: Product) {
     this.vendingService.selectProduct(product);

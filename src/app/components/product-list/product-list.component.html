@@ -2,7 +2,7 @@
     <div *ngIf="products$ | async as products; else loading">
       <mat-list>
         <mat-list-item *ngFor="let product of products">
-          {{ product.name }} - ${{ product.price }} ({{ product.quantity }})
+          {{ product.name }} - {{ product.price | currency:'BGN' }} ({{ product.quantity }})
           <button mat-icon-button color="primary" (click)="onEdit(product)">
             <mat-icon>edit</mat-icon>
           </button>
