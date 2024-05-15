@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, retry, tap } from 'rxjs/operators';
 import { Product } from '../../models/product.model';
 import { environment } from 'src/environments/environment';
 
@@ -10,15 +10,18 @@ import { environment } from 'src/environments/environment';
 })
 export class ProductService {
   private apiUrl = `${environment.apiUrl}/products`;
-
+  private productsSubject = new BehaviorSubject<Product[]>([]);
+  public products$: Observable<Product[]> = this.productsSubject.asObservable();
+  
   constructor(private http: HttpClient) { }
 
   // Fetch all products
-  public getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl).pipe(
-      retry(3), // Retry failed request for products fetching up to 3 times
-      catchError(this.handleError)
-    );
+  public getProducts(): void {
+    this.http.get<Product[]>(this.apiUrl).pipe(
+      retry(3), // Retry a failed request up to 3 times
+      catchError(this.handleError),
+      tap(products => this.productsSubject.next(products)) // Update the BehaviorSubject with the fetched products
+    ).subscribe(); // Subscribe here to kick off the HTTP request
   }
 
     // Fetch a single product by ID
@@ -28,26 +31,40 @@ export class ProductService {
       );
     }
   
-    // Add a new product
-    public addProduct(product: Product): Observable<Product> {
-      return this.http.post<Product>(this.apiUrl, product).pipe(
-        catchError(this.handleError)
-      );
-    }
+  // Add a new product
+  addProduct(product: Product): void {
+    this.http.post<Product>(this.apiUrl, product).pipe(
+      catchError(this.handleError),
+      tap(newProduct => {
+        const currentProducts = this.productsSubject.getValue();
+        this.productsSubject.next([...currentProducts, newProduct]); // Update the BehaviorSubject with the new product
+      })
+    ).subscribe();
+  }
   
-    // Update an existing product
-    public updateProduct(product: Product): Observable<Product> {
-      return this.http.put<Product>(`${this.apiUrl}/${product.id}`, product).pipe(
-        catchError(this.handleError)
-      );
-    }
+  // Update an existing product
+  updateProduct(product: Product): void {
+    this.http.put<Product>(`${this.apiUrl}/${product.id}`, product).pipe(
+      catchError(this.handleError),
+      tap(updatedProduct => {
+        const currentProducts = this.productsSubject.getValue();
+        const updatedProducts = currentProducts.map(p => p.id === updatedProduct.id ? updatedProduct : p);
+        this.productsSubject.next(updatedProducts); // Update the BehaviorSubject with the updated product list
+      })
+    ).subscribe();
+  }
   
-    // Delete a product
-    public deleteProduct(productId: number): Observable<any> {
-      return this.http.delete(`${this.apiUrl}/${productId}`).pipe(
-        catchError(this.handleError)
-      );
-    }
+  // Delete a product
+  deleteProduct(productId: number): void {
+    this.http.delete(`${this.apiUrl}/${productId}`).pipe(
+      catchError(this.handleError),
+      tap(() => {
+        const updatedProducts = this.productsSubject.getValue().filter(p => p.id !== productId);
+        this.productsSubject.next(updatedProducts); // Update the BehaviorSubject with the new product list
+      })
+    ).subscribe();
+  }
+
 
   // Adding error handling for issues with network or backend(Imagining its not just a mocked API)
   private handleError(error: HttpErrorResponse) {

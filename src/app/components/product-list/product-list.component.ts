@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product/product.service';
 import { Product } from '../../models/product.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
@@ -8,21 +9,13 @@ import { Product } from '../../models/product.model';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  products: Product[] = [];
-  // errorMessage: string;
+  products$: Observable<Product[]>;
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService) { 
+    this.products$ = this.productService.products$;  // Initialize the observable
+  }
 
   ngOnInit() {
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products = products;
-        console.log("this.products ", this.products)
-      },
-      error: (err) => {
-        // this.errorMessage = err;
-        // Optionally implement additional error handling logic here
-      }
-    });
+    this.productService.getProducts();
   }
 }
