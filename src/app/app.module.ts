@@ -7,6 +7,9 @@ import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { CoinInsertComponent } from './components/coin-insert/coin-insert.component';
 import { ProductInteractionComponent } from './components/product-interaction/product-interaction.component';
+import { AngularMaterialModule } from './angular-material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +21,9 @@ import { ProductInteractionComponent } from './components/product-interaction/pr
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularMaterialModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
