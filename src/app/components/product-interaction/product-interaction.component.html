@@ -1,1 +1,30 @@
-<p>product-interaction works!</p>
+<div *ngIf="products$ | async as products; else loading">
+  <div class="product-list">
+    <mat-card *ngFor="let product of products" class="product-card" (click)="onSelectProduct(product)"
+              [class.selected]="selectedProduct?.id === product.id">
+      <mat-card-content>
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.price | currency:'BGN' }} ({{ product.quantity }})</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="coin-inventory">
+    <h3>Available Coins: {{ totalAmount$ | async | currency:'BGN' }}</h3>
+  </div>
+  <div class="coin-insert-container">
+    <button mat-raised-button (click)="insertCoin(0.10)">Insert 0.10 BGN</button>
+    <button mat-raised-button (click)="insertCoin(0.20)">Insert 0.20 BGN</button>
+    <button mat-raised-button (click)="insertCoin(0.50)">Insert 0.50 BGN</button>
+    <button mat-raised-button (click)="insertCoin(1.00)">Insert 1.00 BGN</button>
+  </div>
+  <p>Amount Inserted: {{ insertedAmount$ | async | currency:'BGN' }}</p>
+  <button mat-raised-button color="primary" (click)="onPurchase()" 
+          [disabled]="!selectedProduct">Purchase</button>
+  <button mat-raised-button color="warn" (click)="reset()">Reset</button>
+</div>
+<ng-template #loading>
+  <div class="loading-spinner">
+    <mat-spinner></mat-spinner>
+    <p>Loading products...</p>
+  </div>
+</ng-template>
