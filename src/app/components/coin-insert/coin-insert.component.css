@@ -1,0 +1,12 @@
+.coin-insert-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0;
+    width: 100%;
+  }
+  
+  button {
+    margin: 8px;
+  }
+  

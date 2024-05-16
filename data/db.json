@@ -1,0 +1,58 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Coca Cola",
+      "price": 1.25,
+      "quantity": 15
+    },
+    {
+      "id": "2",
+      "name": "Diet Coke",
+      "price": 1.25,
+      "quantity": 14
+    },
+    {
+      "id": "3",
+      "name": "Peanuts",
+      "price": 2.70,
+      "quantity": 15
+    },
+    {
+      "id": "4",
+      "name": "Water",
+      "price": 1.00,
+      "quantity": 15
+    },
+    {
+      "id": "5",
+      "name": "Bake Rolls Pizza",
+      "price": 1.60,
+      "quantity": 14
+    },
+    {
+      "id": "6",
+      "name": "Bruschette Maretti - Spinach & Cheese",
+      "price": 1.60,
+      "quantity": 14
+    },
+    {
+      "id": "7",
+      "name": "Snack Bar",
+      "price": 0.85,
+      "quantity": 14
+    },
+    {
+      "id": "8",
+      "name": "Chips",
+      "price": 0.9,
+      "quantity": 15
+    },
+    {
+      "id": "9",
+      "name": "Chocolate",
+      "price": 1.50,
+      "quantity": 12
+    }
+  ]
+}
