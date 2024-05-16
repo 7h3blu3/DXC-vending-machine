@@ -1,21 +1,52 @@
+.product-interaction-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.total-amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .product-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   justify-content: center;
   margin-bottom: 16px;
-  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .product-card {
+  background-color: #f8f8f8;
   width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .product-card.selected {
@@ -26,20 +57,96 @@
   margin-bottom: 16px;
 }
 
-.coin-inventory {
-  margin-bottom: 16px;
-  text-align: center;
-}
-
 .coin-insert-container {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin: 16px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.coin-insert-container button {
+  flex: 1 1 100px;
+  margin-bottom: 8px;
+}
+
+.inserted-amount {
+  margin: 16px 0;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.actions button {
+  flex: 1 1 100px;
 }
 
 .loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .header {
+    justify-content: center;
+  }
+
+  .total-amount {
+    font-size: 14px;
+  }
+
+  .product-card {
+    padding: 8px;
+  }
+
+  .product-list {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .coin-insert-container {
+    grid-template-columns: 1fr;
+  }
+
+  .coin-insert-container button {
+    flex: 1 1 auto;
+  }
+  .actions button {
+    flex: 1 1 80px;
+  }
+
+  .inserted-amount {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-list {
+    grid-template-columns: 1fr;
+  }
+
+  .total-amount {
+    font-size: 12px;
+  }
+  .coin-insert-container button {
+    flex: 1 1 auto;
+  }
+  .actions button {
+    flex: 1 1 60px;
+  }
+
+  .inserted-amount {
+    font-size: 12px;
+  }
 }
